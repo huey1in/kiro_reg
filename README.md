@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="build/appicon.png" width="100" height="100" alt="Kiro 注册机">
+  <img src="frontend/assets/appicon.png" width="100" height="100" alt="Kiro 注册机">
 </p>
 
 <h1 align="center">Kiro 协议注册机</h1>
