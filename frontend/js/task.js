@@ -225,72 +225,24 @@ function showUpdateModal(data) {
   document.getElementById('update-latest-version').textContent = data.latestVersion || data.version || '-';
   document.getElementById('update-release-date').textContent = data.releaseDate || '-';
   document.getElementById('update-changelog').textContent = data.changelog || '-';
-  
-  // 重置进度条状态，防止显示上一次下载卡住的进度
-  document.getElementById('update-progress-container').style.display = 'none';
-  var progressBar = document.getElementById('update-progress-bar');
-  var progressText = document.getElementById('update-progress-text');
-  if (progressBar) progressBar.style.width = '0%';
-  if (progressText) progressText.textContent = '0% (0.0 MB / 0.0 MB)';
-  
+
+  // 记下 release 页面地址供「前往下载」按钮使用
+  window._latestReleaseURL = data.releaseURL || 'https://github.com/huey1in/kirox/releases/latest';
+
   document.getElementById('update-modal').classList.add('show');
 }
 
 async function closeUpdateModal() {
   document.getElementById('update-modal').classList.remove('show');
-  
-  var btn = document.getElementById('btn-update-now');
-  // 如果当前正处于下载中，"稍后更新"应该主动通知后端断开连接取消下载
-  if (btn && btn.disabled && btn.textContent === '下载中...') {
-      btn.disabled = false;
-      btn.textContent = '立即更新';
-      document.getElementById('update-progress-container').style.display = 'none';
-      if (window.go && window.go.main && window.go.main.App && window.go.main.App.CancelUpdate) {
-          await window.go.main.App.CancelUpdate();
-      }
-      showToast('已取消后台更新');
-  }
 }
 
-async function downloadUpdate() {
-  document.getElementById('update-progress-container').style.display = 'block';
-  document.getElementById('btn-update-now').disabled = true;
-  document.getElementById('btn-update-now').textContent = '下载中...';
-  
-  try {
-    // 不传递 URL，由后端从安全缓存中获取下载地址
-    var result = await window.go.main.App.DownloadUpdate();
-    if (result.error) {
-      showToast('下载失败: ' + result.error, 'error');
-      document.getElementById('btn-update-now').disabled = false;
-      document.getElementById('btn-update-now').textContent = '立即更新';
-      return;
-    }
-    
-    if (result.success) {
-      showToast('更新下载完成，即将重启...');
-      setTimeout(function() {
-        if (window.runtime && window.runtime.Quit) {
-          window.runtime.Quit();
-        }
-      }, 2000);
-    }
-  } catch(e) {
-    showToast('下载失败: ' + e.message, 'error');
-    document.getElementById('btn-update-now').disabled = false;
-    document.getElementById('btn-update-now').textContent = '立即更新';
+function openReleasePage() {
+  var url = window._latestReleaseURL || 'https://github.com/huey1in/kirox/releases/latest';
+  if (window.go && window.go.main && window.go.main.App && window.go.main.App.OpenURL) {
+    window.go.main.App.OpenURL(url);
+  } else {
+    window.open(url, '_blank');
   }
-}
-
-function updateDownloadProgress(progress, downloaded, total) {
-  var progressBar = document.getElementById('update-progress-bar');
-  var progressText = document.getElementById('update-progress-text');
-  
-  progressBar.style.width = Math.round(progress) + '%';
-  
-  var downloadedMB = (downloaded / 1024 / 1024).toFixed(1);
-  var totalMB = (total / 1024 / 1024).toFixed(1);
-  progressText.textContent = Math.round(progress) + '% (' + downloadedMB + ' MB / ' + totalMB + ' MB)';
 }
 
 async function checkUpdateManually() {

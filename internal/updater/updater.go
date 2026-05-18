@@ -60,6 +60,7 @@ type githubRelease struct {
 	Name        string `json:"name"`
 	Body        string `json:"body"`
 	PublishedAt string `json:"published_at"`
+	HTMLURL     string `json:"html_url"`
 	Assets      []struct {
 		Name               string `json:"name"`
 		BrowserDownloadURL string `json:"browser_download_url"`
@@ -161,6 +162,11 @@ func CheckUpdate() map[string]interface{} {
 		releaseDate = release.PublishedAt[:10]
 	}
 
+	releaseURL := release.HTMLURL
+	if releaseURL == "" {
+		releaseURL = "https://github.com/huey1in/kirox/releases/latest"
+	}
+
 	return map[string]interface{}{
 		"hasUpdate":      hasUpdate,
 		"currentVersion": currentVersion,
@@ -168,6 +174,7 @@ func CheckUpdate() map[string]interface{} {
 		"releaseDate":    releaseDate,
 		"changelog":      release.Body,
 		"downloadURL":    downloadURL,
+		"releaseURL":     releaseURL,
 	}
 }
 

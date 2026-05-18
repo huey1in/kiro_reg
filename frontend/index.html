@@ -84,12 +84,12 @@
 
 <!-- 更新提示模态框 -->
 <div id="update-modal" class="modal-overlay">
-  <div style="width:100%;max-width:500px;padding:24px;">
-    <div class="card" style="padding:32px;">
-      <div style="text-align:center;margin-bottom:24px;--wails-draggable:drag;cursor:move;">
+  <div style="width:100%;max-width:500px;padding:24px;max-height:90vh;display:flex;">
+    <div class="card" style="padding:32px;display:flex;flex-direction:column;min-height:0;flex:1;">
+      <div style="text-align:center;margin-bottom:24px;--wails-draggable:drag;cursor:move;flex-shrink:0;">
         <div style="font-size:18px;font-weight:700;color:var(--accent);">发现新版本</div>
       </div>
-      <div style="margin-bottom:24px;--wails-draggable:no-drag;">
+      <div style="margin-bottom:16px;--wails-draggable:no-drag;flex-shrink:0;">
         <div style="display:flex;justify-content:space-between;margin-bottom:12px;font-size:13px;">
           <span style="color:var(--text-secondary);">当前版本</span>
           <span id="update-current-version" style="font-family:var(--font-mono);font-weight:600;">-</span>
@@ -98,23 +98,18 @@
           <span style="color:var(--text-secondary);">最新版本</span>
           <span id="update-latest-version" style="font-family:var(--font-mono);font-weight:600;color:var(--accent);">-</span>
         </div>
-        <div style="display:flex;justify-content:space-between;margin-bottom:12px;font-size:13px;">
+        <div style="display:flex;justify-content:space-between;font-size:13px;">
           <span style="color:var(--text-secondary);">发布日期</span>
           <span id="update-release-date" style="font-family:var(--font-mono);font-weight:600;">-</span>
         </div>
       </div>
-      <div style="margin-bottom:24px;padding:16px;background:var(--bg-subtle);border:1px solid var(--border);border-radius:var(--radius);--wails-draggable:no-drag;">
-        <div style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">更新内容</div>
-        <div id="update-changelog" style="font-size:12px;line-height:1.6;color:var(--text);white-space:pre-wrap;">-</div>
+      <div style="margin-bottom:20px;padding:16px;background:var(--bg-subtle);border:1px solid var(--border);border-radius:var(--radius);--wails-draggable:no-drag;flex:1;min-height:0;display:flex;flex-direction:column;">
+        <div style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;flex-shrink:0;">更新内容</div>
+        <div id="update-changelog" style="font-size:12px;line-height:1.6;color:var(--text);white-space:pre-wrap;overflow-y:auto;flex:1;min-height:0;">-</div>
       </div>
-      <div id="update-progress-container" style="display:none;margin-bottom:24px;--wails-draggable:no-drag;">
-        <div style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">下载进度</div>
-        <div class="progress-bg"><div id="update-progress-bar" class="progress-bar"></div></div>
-        <div id="update-progress-text" style="font-size:11px;color:var(--text-secondary);margin-top:6px;text-align:center;">0%</div>
-      </div>
-      <div class="btn-row" style="--wails-draggable:no-drag;">
-        <button onclick="closeUpdateModal()" id="btn-update-later" class="btn btn-secondary" style="flex:1;justify-content:center;">稍后更新</button>
-        <button onclick="downloadUpdate()" id="btn-update-now" class="btn btn-dark" style="flex:1;justify-content:center;">立即更新</button>
+      <div class="btn-row" style="--wails-draggable:no-drag;flex-shrink:0;">
+        <button onclick="closeUpdateModal()" id="btn-update-later" class="btn btn-secondary" style="flex:1;justify-content:center;">稍后</button>
+        <button onclick="openReleasePage()" id="btn-update-now" class="btn btn-dark" style="flex:1;justify-content:center;">前往下载</button>
       </div>
     </div>
   </div>
